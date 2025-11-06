@@ -1,0 +1,123 @@
+html {
+    font-family: sans-serif;
+    background-color: whitesmoke;
+}
+
+h1 {
+    text-align: center;
+}
+
+input ,button {
+    margin: o;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    outline: none;
+    color: inherit;
+    outline:  none;
+    box-sizing:  border-box;
+
+}
+
+button {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 1rem;
+    border-style: solid;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+/* input and aadd button */
+
+#add-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#task-input {
+    width: 100%;
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+/* view list mode toggle */
+#view-toggle-container {
+    display: flex;
+    gap: 1rem;
+}
+
+
+.toggle-btn  {
+    background-color: whitesmoke;
+    width: 50%;
+}
+
+/* to-do list */
+
+/* card-view */
+
+.card-view {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0%;
+}
+
+li {
+    display: block;
+    width: 100%;
+}
+
+.card-view li {
+    background-color: rgb(207, 240, 253);
+    height: 3rem;
+    border: 1px solid black;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* list-view */
+
+.list-view {
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 1rem 1rem 1rem 2rem;
+    background-color: rgb(207, 240, 253);
+}
+
+.list-view li {
+    height: 2rem;
+    display: list-item;
+}
+
+
+/* buttons */
+
+/* general button rules */
+
+button:hover {
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background-color: royalblue;
+}
+
+.toggle-btn:active {
+    background-color: midnightblue;
+    color: rgb(255, 255, 255);
+}
+
+#add-btn:hover {
+    background-color: royalblue;
+}
+
+#add-btn:active {
+    background-color: midnightblue;
+    color: rgb(255, 255, 255);
+}
+

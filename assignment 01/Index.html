@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Soundtrack LocalBox</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="assets/script.js" defer></script>
+</head>
+
+<body>
+
+  <header class="container">
+    <h1>🎧 SoundTrack LocalBox</h1>
+
+    <!-- Add bar -->
+
+    <div class="row add-bar">
+      <input type="text" id="track-input" placeholder="Insert the name of the track :)" />
+      <label for="file-input" class="btn" id="upload-btn">Upload ⬇️</label>
+      <input type="file" id="file-input" accept="audio/*" hidden />
+      <button type="button" class="btn" id="add-btn">+</button>
+    </div>
+
+    <!-- Controls (color + clean + view) -->
+
+    <div class="row controls">
+      <div class="row-left">
+        <input type="color" id="color-picker" value="#4fd0ff"/>
+        <button type="button" class="btn danger" id="clean-btn">Clean all</button>
+      </div>
+      <div class="row-right">
+        <button type="button" class="btn toggle active" id="list-view-btn">List</button>
+        <button type="button" class="btn toggle" id="card-view-btn">Card</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Track area (switch: add class list-view OR card-view) -->
+
+    <ul id="track-list" class="list-view">
+      <li class="card" style="background-color: #4fcaff;">
+        <span class="title">Prayer (Unrelised) - Kendrick Lamar</span>
+      </li>
+      <li class="card" style="background-color: #ffa44f;">
+        <span class="title">Picture Me Rollin' - 2Pac</span>
+      </li>
+      <li class="card" style="background-color: #4fa4ff;">
+        <span class="title">Type Beat (Demo) - 133bpm</span>
+      </li>
+    </ul>
+  </main>
+
+</body>
+
+</html>
