@@ -95,7 +95,6 @@ h1 {
 }
 
 
-
 #color-picker {
   width: 42px;
   height: 42px;
@@ -203,6 +202,7 @@ ul {
 }
 
 /* Play/Pause btn */
+
 .play-btn {
   position: absolute;
   width: 20px;
@@ -243,7 +243,8 @@ ul {
   right: 11px;
 }
 
-/* "x" button" */
+/* "x" btn" */
+
 .delete-btn {
   position: absolute;
   background: transparent;
@@ -255,6 +256,7 @@ ul {
 }
 
 /* "x" btn list view */
+
 .list-view .card {
   position: relative;
 }
@@ -265,6 +267,7 @@ ul {
 }
 
 /* "x" btn Card view */
+
 .card-view .card {
   position: relative;
 }
