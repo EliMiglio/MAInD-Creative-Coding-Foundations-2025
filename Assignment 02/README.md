@@ -81,8 +81,8 @@ Goose Game is a simple browser mini-game built with HTML, CSS and JavaScript. Th
 - Expression logic: 
 
   It checks what happens when the player lands on the current square.  
-  1. If 'urrPos' equals 'PATH_LENGTH', it immediately calls 'handleWin()'.  
-  2. Otherwise it reads the effect from 'SPECIAL_SQUARES[curPos]'.  
+  - If 'urrPos' equals 'PATH_LENGTH', it immediately calls 'handleWin()'.  
+  - Otherwise it reads the effect from 'SPECIAL_SQUARES[curPos]'.  
      If the effect is '0', nothing happens.  
      If the effect is '-1', it calls 'handleRip()' for game over.  
      If the effect is a positive number, it sets 'currPos' to that target square (teleport), updates the position with 'updatePlayerPosition()', and then checks again for win or RIP.  
