@@ -1,0 +1,314 @@
+// Game parameters
+const PATH_LENGTH = 13;  // total steps
+
+const winSound  = new Audio("Assets/Audio/Win.mp3");
+const failSound = new Audio("Assets/Audio/Gameover.wav");
+const diceSound = new Audio("Assets/Audio/diceroll.mp3");
+diceSound.volume = 0.1; // volume at 30%
+
+// WEATHER API
+const WEATHER_API_KEY = '8c19e7402d6d8ada86d0c4e88df37420'
+const WEATHER_CITY = 'Mendrisio'
+const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=' + WEATHER_CITY + '&appid=' + WEATHER_API_KEY + '&units=metric'
+
+// Game status variables
+let currPos = 0; // start on square 0
+let dice = 0;    // dice value
+
+const diceButton = document.getElementById("dice-result");
+const diceDisplay = document.getElementById("dice");  
+const pathContainer = document.getElementById("path-container");
+const banner = document.getElementById("popup-banner");
+const gameOutcome = document.getElementById("game-outcome");
+const buttonCloserBanner = document.getElementById("close-banner-btn");
+const tiles = pathContainer.querySelectorAll("li"); // all the squares
+const avatarScreen = document.getElementById("avatar-screen");
+const avatarImages = document.querySelectorAll(".avatar");
+let selectedAvatar = null;
+
+const weatherInfoEl = document.getElementById("weather-info");
+
+
+
+// NEW API PART 
+
+
+
+// API
+
+function updateBackgroundByWeather() {
+  fetch(WEATHER_API_URL)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Weather API error: " + response.status);
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      displayWeatherData(data);
+    })
+    .catch((error) => {
+      displayWeatherError(error);
+    });
+}
+
+// Management of data received from the API
+
+function displayWeatherData(data) {
+  console.log(data);
+
+  const mainWeather =
+    data.weather && data.weather[0] && data.weather[0].main
+      ? data.weather[0].main
+      : "";
+
+  const temp =
+    data.main && typeof data.main.temp === "number"
+      ? Math.round(data.main.temp)
+      : null;
+
+  if (weatherInfoEl) {
+    let text = `Today in ${WEATHER_CITY}: ${mainWeather || "N/A"}`;
+    if (temp !== null) {
+      text += `, ${temp}°C`;
+    }
+    weatherInfoEl.textContent = text;
+  }
+
+  // update the body class based on the weather
+
+  applyWeatherClass(mainWeather);
+}
+
+// Display Error
+function displayWeatherError(error) {
+  console.log("Unable to fetch weather data:", error);
+
+  if (weatherInfoEl) {
+    weatherInfoEl.textContent = "Weather data unavailable";
+  }
+}
+
+// Set the body class based on the main weather
+
+function applyWeatherClass(mainWeather) {
+
+  // remove last classes
+
+  document.body.classList.remove(
+    "weather-sunny",
+    "weather-clouds",
+    "weather-rain",
+    "weather-snow"
+  );
+
+  let weatherClass = "";
+
+  if (mainWeather === "Clear") {
+    weatherClass = "weather-sunny";
+  } else if (
+    mainWeather === "Clouds" ||
+    mainWeather === "Mist" ||
+    mainWeather === "Fog" ||
+    mainWeather === "Haze" ||
+    mainWeather === "Smoke"
+  ) {
+    weatherClass = "weather-clouds";
+  } else if (
+    mainWeather === "Rain" ||
+    mainWeather === "Drizzle" ||
+    mainWeather === "Thunderstorm"
+  ) {
+    weatherClass = "weather-rain";
+  } else if (mainWeather === "Snow") {
+    weatherClass = "weather-snow";
+  }
+
+  if (weatherClass) {
+    document.body.classList.add(weatherClass);
+  }
+}
+
+
+
+// END NEW API PART 
+
+
+
+// Special squares as array
+
+const SPECIAL_SQUARES = [
+  0,  // 0: start
+  6,  // 1 go to 6
+  0,  // 2 none
+  0,  // 3 none
+  5,  // 4 go to 5
+  0,  // 5 none
+  -1, // 6 RIP :(
+  6,  // 7 go to 6
+  0,  // 8 none
+  0,  // 9 none
+  0,  // 10 none
+  9,  // 11 go to 9
+  3,  // 12 go to 3
+  0   // 13 WINN! managed with PATH_LENGTH
+];
+
+// Choose an avatar
+
+function setAvatar() {
+  avatarImages.forEach((img) => {
+    img.addEventListener("click", () => {
+      selectedAvatar = img.dataset.avatar; 
+      document.body.classList.remove("avatar-tamarra", "avatar-street", "avatar-elegant");
+      document.body.classList.add("avatar-" + selectedAvatar);
+
+      avatarScreen.style.display = "none"; // Hide this avatar screen
+      newAttempt();
+    })
+  })
+}
+
+setAvatar();
+
+// New attempt
+function newAttempt() {
+  console.log("New attempt");
+  currPos = 0;
+  dice = 0;
+  updateDice();
+  resetPath();
+  updatePlayerPosition();
+}
+
+function resetPath() {
+  tiles.forEach((tile) => {
+    
+    tile.classList.remove("active");
+  })
+}
+
+function updateDice() {
+  if (dice === 0) {
+    diceDisplay.textContent = "-";
+  } else {
+    diceDisplay.textContent = dice;
+  }
+}
+
+// 4) Click dice button
+
+
+function rollDice() {
+  dice = Math.floor(Math.random() * 6) + 1;
+  updateDice();
+  movePlayer(dice);
+}
+
+diceButton.addEventListener("click", () => {
+  diceSound.play().catch(() => {});
+  rollDice();
+})
+
+// 5) MovePlayer
+
+function movePlayer(step) {
+  const nextPos = currPos + step;
+
+  // If you pass the last one, you don't move
+  if (nextPos > PATH_LENGTH) {
+    return;
+  }
+
+  currPos = nextPos;
+  updatePlayerPosition();
+  checkSpecialSquare();
+}
+
+function updatePlayerPosition() {
+  resetPath();
+
+  const currentTile = document.getElementById(String(currPos));
+  if (currentTile) {
+    currentTile.classList.add("active");
+  }
+}
+
+// Check special square
+
+function checkSpecialSquare() {
+
+
+  // WIN
+
+  if (currPos === PATH_LENGTH) {
+    handleWin();
+    return;
+  }
+
+  const effect = SPECIAL_SQUARES[currPos] ?? 0;
+
+  // 0, None
+
+  if (effect === 0) return;
+
+  // -1, RIP game over
+
+  if (effect === -1) {
+    handleRip();
+    return;
+  }
+
+  // > 0, Go to (square X)
+
+  currPos = effect;
+  updatePlayerPosition();
+
+  // If you are on the last square, Win
+
+  if (currPos === PATH_LENGTH) {
+    handleWin();
+    return;
+  }
+
+  // If is rip, Game over
+
+  if (SPECIAL_SQUARES[currPos] === -1) {
+    handleRip();
+  }
+}
+
+// WIN 
+
+function handleWin() {
+  winSound.play().catch(() => {});
+  popupOutcomeBanner("You win!", "win");
+}
+
+// RIP (game over)
+
+function handleRip() {
+  failSound.play().catch(() => {});
+  popupOutcomeBanner("Game over", "fail");
+}
+
+// Popup (status)
+
+function popupOutcomeBanner(message, result) {
+  gameOutcome.innerHTML = message;
+  banner.className = "";
+  banner.classList.add("active", result);
+}
+
+// Click Continue
+
+buttonCloserBanner.addEventListener("click", () => {
+  banner.className = ""; // close popup
+  newAttempt();          
+})
+
+// STARTTT :)
+
+newAttempt();
+updateBackgroundByWeather();
