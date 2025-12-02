@@ -7,7 +7,7 @@ const diceSound = new Audio("Assets/Audio/diceroll.mp3");
 diceSound.volume = 0.1; // volume at 30%
 
 // WEATHER API
-const WEATHER_API_KEY = ''
+const WEATHER_API_KEY = '8c19e7402d6d8ada86d0c4e88df37420'
 const WEATHER_CITY = 'Mendrisio'
 const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=' + WEATHER_CITY + '&appid=' + WEATHER_API_KEY + '&units=metric'
 
