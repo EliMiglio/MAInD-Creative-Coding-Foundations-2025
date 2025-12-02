@@ -56,7 +56,7 @@ body.weather-rain {
 body.weather-snow {
   background-image: url("Img/bg-snow.png");
   background-size: 1550px;   
-  background-position: center; 
+  background-position: center top; 
 }
 
 header {
@@ -175,12 +175,17 @@ p {
 }
 
 #banner-content {
-  padding: 2rem;
+  width: 15rem;       
+  height: 10rem;
   min-width: 7rem;
   border-radius: 1rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 #game-outcome {
+  margin-top: 1.5rem;
   margin-bottom: 2rem;
   font-size: 2rem;
   overflow-wrap: break-word;
@@ -207,13 +212,13 @@ p {
 }
 
 #popup-banner.fail #banner-content {
-  background: linear-gradient(to bottom, #e69c88, #ec6969);
-  border: 0.1rem solid #ec6f6f;
+  background: none; 
+  border: 0.1rem solid #ffffff;
 }
 
 #popup-banner.win #banner-content {
-  background: linear-gradient(to bottom, #fff0bc, #fff1d8);
-  border: 0.1rem solid #ffd2a5;
+  background: none;
+  border: 0.1rem solid #ffffff;
 }
 
 /* PATH-CONTAINER */
@@ -312,6 +317,21 @@ p {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100%;
+}
+
+#path-container li.rip-square {
+  background-image: url("Img/RIP-square.png");
+  background-color: rgb(59, 59, 59);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#path-container li.win-square {
+  background-image: url("Img/WIN-square.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 body.avatar-tamarra #path-container li.active {

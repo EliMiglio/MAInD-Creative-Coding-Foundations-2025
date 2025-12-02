@@ -2,14 +2,18 @@
 
 ## Brief
 
-Choose a “mini-game” to rebuild with HTML, CSS and JavaScript. The requirements are:
+Upgrade the **Assignment 02** by adding the use of data coming from an external web API. For example, fetch contents (audio, images, video, text, metadata) from online archives, AI generated contents (chatGPT API), data (weather, realtime traffic data, environmental data).
 
-- The webpage should be responsive
-- Choose an avatar at the beginning of the game
-- Keep track of the score of the player
-- Use the keyboard to control the game (indicate what are the controls in the page). You can also use buttons (mouse), but also keyboard.
-- Use some multimedia files (audio, video, …)
-- Implement an “automatic restart” in the game (that is not done via the refresh of the page)
+Have a look at the lesson about the API:
+
+[https://wind-submarine-3d4.notion.site/Lesson-5-200d516637bc811aba69e13b0ffe438f?pvs=74](https://www.notion.so/200d516637bc811aba69e13b0ffe438f?pvs=21)
+
+The application **must** have those requirements:
+
+- The webpage is responsive
+- Use a web API (you choose which one best fists for your project) to load the data and display them in the webpage
+- At least one multimedia file (for user feedback interactions, or content itself)
+- Develop a navigation system that allows the user to navigate different sections with related content and functionalities
 
 ## Screenshots
 
@@ -17,93 +21,137 @@ Choose a “mini-game” to rebuild with HTML, CSS and JavaScript. The requireme
 ![Flow chart](DOC/Screenshot2.png)
 ![Flow chart](DOC/Screenshot3.png)
 ![Flow chart](DOC/Screenshot4.png)
+![Flow chart](DOC/Screenshot5.png)
+![Flow chart](DOC/Screenshot6.png)
+![Flow chart](DOC/Screenshot7.png)
 
 ## Project description
 
-Goose Game is a simple browser mini-game built with HTML, CSS and JavaScript. The player first selects one of three goose avatars, then rolls a dice to move along a G-shaped path. Special squares trigger traps or shortcuts, with sounds and pop-up messages for win and game over.
+Goose Game is a browser mini-game built with HTML, CSS and JavaScript: pick one of three goose avatars, roll the dice and move along a G-shaped path with traps and bonuses. A simple weather API changes the background based on real-time conditions.
 
 ## Flowchart
 
-![Flow chart](DOC/Assignment-02.drawio.svg)
+![Flow chart](DOC/Assignment-03.drawio.svg)
 
 ## Function list
 
 
-### setAvatar()
+### updateBackgroundByWeather()
  
 - Expression logic:
 
-  It adds a 'click event listener to each avatar image. When the user clicks on one avatar, the function saves the chosen avatar in 'selectedAvatar', updates the "body" class ('avatar-tamarra', 'avatar-street', or 'avatar-elegant'), hides the avatar selection screen and calls 'newAttempt()' to reset the game. 
+Calls the weather API with fetch(WEATHER_API_URL). If the response is OK it parses the JSON and passes it to displayWeatherData(), otherwise it goes to displayWeatherError().
 
-- Return values: effects on DOM and global state
-
-### newAttempt()
+### displayWeatherData(data)
  
 - Expression logic:  
 
-  It resets the game state at the beginning of a new attempt: sets 'currPos' and 'dice' back to 0, updates the dice display with 'updateDice()', clears all active tiles with 'resetPath()', and finally calls 'updatePlayerPosition()' to place the player at the start.  
+Reads the main weather condition and temperature from the API response, writes a short text into #weather-info (“Today in Mendrisio: …”) and then calls applyWeatherClass(mainWeather) to update the body background.
+
+### displayWeatherError(error)
+
+- Expression logic:
+
+Logs the error in the console and, if the element exists, sets #weather-info to “Weather data unavailable”. 
+
+### applyWeatherClass(mainWeather)
+
+- Expression logic:  
+
+First removes all previous weather classes from the body, then picks one CSS class (weather-sunny, weather-clouds, weather-rain or weather-snow) depending on the main weather string and adds it to the body.
+
+### setAvatar()
+
+- Expression logic:
+
+Adds a click listener to each .avatar image. When the user selects one, it saves the choice in selectedAvatar, changes the body class (avatar-tamarra, avatar-street, avatar-elegant), hides the avatar screen and calls newAttempt().
+
+### newAttempt()  
+
+- Expression logic:
+
+Resets the game state: sets currPos and dice to 0, updates the dice display with updateDice(), clears the path with resetPath() and finally calls updatePlayerPosition() to place the player back on the start square.
 
 ### resetPath()
 
 - Expression logic:
 
-  It loops through all "li" elements in the game path ('tiles') and removes the 'active' class from each one. This clears any previous player position before drawing the new one.  
+Loops over all tiles in the path and removes the active class, so no square is highlighted before drawing the new position.
 
 ### updateDice()
 
-- Expression logic:  
+- Expression logic: 
 
-  It updates the dice text shown in the UI: if 'dice' is '0' it displays '"-"', otherwise it shows the current dice value.  
+Updates the text inside #dice: if dice is 0 it shows "-", otherwise it shows the current dice value. 
 
 ### rollDice()
 
 - Expression logic:
 
-  It generates a random integer between 1 and 6, assigns it to 'dice', updates the UI with 'updateDice()', and then calls 'movePlayer(dice)' to move the player forward along the path.
+Generates a random integer between 1 and 6, saves it in dice, updates the UI with updateDice() and then calls movePlayer(dice) to move the avatar.
 
 ### movePlayer(step)
 
-- Parameters:
+- Parameters: 
 
-  'step' (number): how many squares the player should move forward.  
+step (number): how many squares to move forward. 
 
-- Expression logic:
+- Expression logic: 
 
-  It computes the next position as 'currPos + step'. If this value is greater than 'PATH_LENGTH', the function stops and the player does not move. Otherwise, it updates 'currPos' with the new value, calls 'updatePlayerPosition()' to update the active tile and then calls 'checkSpeciaklSquare()' to handle possible traps or shortcuts.
+Computes nextPos = currPos + step. If nextPos is greater than PATH_LENGTH it does nothing; otherwise it updates currPos, calls updatePlayerPosition() and then checkSpecialSquare() to handle traps or shortcuts.
 
 ### updatePlayerPosition()
 
 - Expression logic:
-  It first clears all tiles with 'resetPath()', then finds the "li" element whose 'id' matches the current 'currPos' and adds the 'active' class to it. This visually places the avatar on the correct square.  
+
+Calls resetPath() to clear all active tiles, then finds the li with id equal to currPos and adds the active class, so the current square is visually highlighted.
 
 ### checkSpecialSquare()
 
-- Expression logic: 
+- Expression logic:
 
-  It checks what happens when the player lands on the current square.  
-  - If 'urrPos' equals 'PATH_LENGTH', it immediately calls 'handleWin()'.  
-  - Otherwise it reads the effect from 'SPECIAL_SQUARES[curPos]'.  
-     If the effect is '0', nothing happens.  
-     If the effect is '-1', it calls 'handleRip()' for game over.  
-     If the effect is a positive number, it sets 'currPos' to that target square (teleport), updates the position with 'updatePlayerPosition()', and then checks again for win or RIP.  
+Checks what happens on the current square.
 
-### handleWin()
+-If currPos === PATH_LENGTH, immediately calls handleWin().
 
-- Expression logic: 
-  It plays the win sound ('winSound') and calls 'popupOutcomeBanner("You win!", "win")' to show the win popup with the correct styling.
+-Otherwise reads effect = SPECIAL_SQUARES[currPos] ?? 0.
+If effect is 0, nothing happens.
+If effect is -1, calls handleRip() for game over.
+If effect is a positive number, updates currPos to that target square, calls updatePlayerPosition() and checks again if it’s a win or RIP.
 
-### handleRip()
+### setBannerGif(gifPath)
 
-- Expression logic: 
-  It plays the fail sound ('failSound') and calls 'popupOutcomeBanner("Game over", "fail")' to show the game over popup with the fail styling.  
+- Parameters:
+
+gifPath (string): path of the GIF to show in the popup.
+
+- Expression logic:
+
+If bannerContent exists, sets its background-image style so the chosen GIF appears inside the banner.
+
+### getRandomItem(array)
+
+- Parameters:
+
+array (Array): list of items to choose from.
+
+- Expression logic:
+
+Picks a random index between 0 and array.length - 1 and returns the corresponding element. Used to select a random GIF.
+
+### handleWin() / handleRip()
+
+- Expression logic:
+
+Chooses a random GIF from WIN_GIFS / RIP_GIFS, sends it to setBannerGif(), plays winSound and calls popupOutcomeBanner("You win!", "win" / "Game over", "fail") to show the win / game over popup.
 
 ### popupOutcomeBanner(message, result)
 
 - Parameters:
-  
-'message' (string): the text to display in the popup ("You win!", "Game over"').  
 
-'result' (string): the outcome type ("win" or "fail") used as a CSS class.  
+message (string): text to display in the popup.
+result (string): outcome type ("win" or "fail") used as a CSS class.
 
-- Expression logic: 
-  It sets the inner HTML of '#game-outcome' to the given 'message', resets any existing classes on the popup banner, then adds 'active' and the 'result' class to '#popup-banner'. This makes the popup visible and applies the correct gradient style. 
+- Expression logic:
+
+Sets the content of #game-outcome to message, clears existing classes on #popup-banner and then adds active plus the result class so the banner appears with the correct style.

@@ -1,4 +1,5 @@
 // Game parameters
+
 const PATH_LENGTH = 13;  // total steps
 
 const winSound  = new Audio("Assets/Audio/Win.mp3");
@@ -7,11 +8,13 @@ const diceSound = new Audio("Assets/Audio/diceroll.mp3");
 diceSound.volume = 0.1; // volume at 30%
 
 // WEATHER API
-const WEATHER_API_KEY = '8c19e7402d6d8ada86d0c4e88df37420'
+
+const WEATHER_API_KEY = 
 const WEATHER_CITY = 'Mendrisio'
 const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=' + WEATHER_CITY + '&appid=' + WEATHER_API_KEY + '&units=metric'
 
 // Game status variables
+
 let currPos = 0; // start on square 0
 let dice = 0;    // dice value
 
@@ -27,11 +30,23 @@ const avatarImages = document.querySelectorAll(".avatar");
 let selectedAvatar = null;
 
 const weatherInfoEl = document.getElementById("weather-info");
+const bannerContent = document.getElementById("banner-content");
+const WIN_GIFS = [
+  "Assets/Img/WIN/WIN1.gif",
+  "Assets/Img/WIN/WIN2.gif",
+  "Assets/Img/WIN/WIN3.gif",
+  "Assets/Img/WIN/WIN4.gif"
+];
+const RIP_GIFS = [
+  "Assets/Img/RIP/RIP1.gif",
+  "Assets/Img/RIP/RIP2.gif",
+  "Assets/Img/RIP/RIP3.gif",
+  "Assets/Img/RIP/RIP4.gif"
+];
 
 
 
 // NEW API PART 
-
 
 
 // API
@@ -131,7 +146,6 @@ function applyWeatherClass(mainWeather) {
 }
 
 
-
 // END NEW API PART 
 
 
@@ -146,7 +160,7 @@ const SPECIAL_SQUARES = [
   5,  // 4 go to 5
   0,  // 5 none
   -1, // 6 RIP :(
-  6,  // 7 go to 6
+  0,  // 7 none
   0,  // 8 none
   0,  // 9 none
   0,  // 10 none
@@ -279,9 +293,24 @@ function checkSpecialSquare() {
   }
 }
 
+// Banner GIF
+
+function setBannerGif(gifPath) {
+  if (bannerContent) {
+    bannerContent.style.backgroundImage = `url('${gifPath}')`;
+  }
+}
+
+function getRandomItem(array) {
+  const index = Math.floor(Math.random() * array.length);
+  return array[index];
+}
+
 // WIN 
 
 function handleWin() {
+  const gif = getRandomItem(WIN_GIFS);
+  setBannerGif(gif);
   winSound.play().catch(() => {});
   popupOutcomeBanner("You win!", "win");
 }
@@ -289,6 +318,8 @@ function handleWin() {
 // RIP (game over)
 
 function handleRip() {
+  const gif = getRandomItem(RIP_GIFS);
+  setBannerGif(gif);
   failSound.play().catch(() => {});
   popupOutcomeBanner("Game over", "fail");
 }
