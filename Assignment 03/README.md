@@ -155,3 +155,7 @@ result (string): outcome type ("win" or "fail") used as a CSS class.
 - Expression logic:
 
 Sets the content of #game-outcome to message, clears existing classes on #popup-banner and then adds active plus the result class so the banner appears with the correct style.
+
+## API documentation
+
+https://openweathermap.org
