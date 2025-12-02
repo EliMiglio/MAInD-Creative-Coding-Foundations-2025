@@ -36,30 +36,28 @@ body {
 /* WEATHER BACKGROUNDS */
 
 body.weather-sunny {
-  background-image: url("Img/bg-sunny.jpg");
-  background-size: 1550px auto;   
+  background-image: url("Img/bg-sunny.png");
+  background-size: 1550px;   
   background-position: center top;
 }
 
 body.weather-clouds {
   background-image: url("Img/bg-clouds.png");
-  background-size: 1550px auto; 
+  background-size: 1530px;  
   background-position: center top;
 }
 
 body.weather-rain {
-  background-image: url("Img/bg_rain.png");
-  background-size: 1600px auto; 
-  background-position: center 10%;
+  background-image: url("Img/bg-rain.png");
+  background-size: 1550px;  
+  background-position: center 10%;  
 }
 
 body.weather-snow {
-  background-image: url("Img/bg_snow.jpg");
-  background-size: 1600px auto;   
-  background-position: center -5%;
+  background-image: url("Img/bg-snow.png");
+  background-size: 1550px;   
+  background-position: center; 
 }
-
-
 
 header {
   display: flex;
